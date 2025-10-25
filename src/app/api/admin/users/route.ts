@@ -1,3 +1,6 @@
+// API route disabled for static export
+export const dynamic = 'force-static';
+
 import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 

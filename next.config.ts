@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
   // Mobil erişim için CORS ayarları
   allowedDevOrigins: ["192.168.1.19:3000", "localhost:3000", "127.0.0.1:3000"],
+  // Static export for hosting
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  // API route'lerini devre dışı bırak
+  trailingSlash: true,
   webpack: (config, { dev }) => {
     if (dev) {
       // 禁用 webpack 的热模块替换
