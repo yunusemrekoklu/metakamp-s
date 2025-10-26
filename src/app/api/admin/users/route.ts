@@ -1,14 +1,9 @@
-// API route disabled for static export
-export const dynamic = 'force-static';
-
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { db } from '@/lib/db'
 
 export async function GET() {
   try {
-    const users = await prisma.user.findMany({
+    const users = await db.user.findMany({
       include: {
         scores: {
           orderBy: {
@@ -32,8 +27,8 @@ export async function GET() {
 export async function DELETE() {
   try {
     // Tüm skorları ve kullanıcıları sil
-    await prisma.score.deleteMany({})
-    await prisma.user.deleteMany({})
+    await db.score.deleteMany({})
+    await db.user.deleteMany({})
 
     return NextResponse.json({ message: 'Tüm veriler başarıyla sıfırlandı' })
   } catch (error) {

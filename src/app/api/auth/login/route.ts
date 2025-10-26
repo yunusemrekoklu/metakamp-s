@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { db } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Kullanıcıyı e-posta ile bul
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: {
         email: email.toLowerCase()
       }
