@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Vercel build fix for Tailwind CSS v4
+  // Vercel build optimization for Tailwind CSS v4
   experimental: {
     turbo: {
       rules: {
@@ -25,6 +25,20 @@ const nextConfig: NextConfig = {
         },
       },
     },
+  },
+  // CSS optimization for Vercel
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  // PostCSS and Tailwind CSS v4 compatibility
+  webpack: (config, { dev, isServer }) => {
+    if (!dev && !isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
   },
 };
 
