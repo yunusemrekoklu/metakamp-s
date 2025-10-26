@@ -15,31 +15,6 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Vercel build optimization for Tailwind CSS v4
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },
-  // CSS optimization for Vercel
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-  // PostCSS and Tailwind CSS v4 compatibility
-  webpack: (config, { dev, isServer }) => {
-    if (!dev && !isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-      };
-    }
-    return config;
-  },
 };
 
 export default nextConfig;
