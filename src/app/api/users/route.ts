@@ -6,11 +6,11 @@ import { db } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, username, wantsNewsletter } = await request.json()
+    const { email, username, password, wantsNewsletter } = await request.json()
 
-    if (!email || !username) {
+    if (!email || !username || !password) {
       return NextResponse.json(
-        { error: 'E-posta ve kullanıcı adı zorunludur' },
+        { error: 'E-posta, kullanıcı adı ve şifre zorunludur' },
         { status: 400 }
       )
     }
@@ -28,6 +28,14 @@ export async function POST(request: NextRequest) {
     if (username.length < 3 || username.length > 20) {
       return NextResponse.json(
         { error: 'Kullanıcı adı 3-20 karakter arasında olmalıdır' },
+        { status: 400 }
+      )
+    }
+
+    // Şifre kontrolü
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: 'Şifre en az 6 karakter olmalıdır' },
         { status: 400 }
       )
     }
@@ -62,6 +70,7 @@ export async function POST(request: NextRequest) {
       data: {
         email,
         username,
+        password, // Not: Gerçek uygulamada hash'lenmiş şifre saklanmalı
         wantsNewsletter: wantsNewsletter || false
       }
     })

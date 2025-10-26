@@ -33,7 +33,7 @@ export default function Home() {
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [])
 
-  const handleRegistration = async (userData: { email: string; username: string; wantsNewsletter: boolean }) => {
+  const handleRegistration = async (userData: { email: string; username: string; password: string; wantsNewsletter: boolean }) => {
     try {
       const response = await fetch('/api/users', {
         method: 'POST',
@@ -54,6 +54,30 @@ export default function Home() {
     } catch (error) {
       console.error('Registration error:', error)
       alert('Kayıt sırasında bir hata oluştu')
+    }
+  }
+
+  const handleLogin = async (userData: { email: string; password: string }) => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setCurrentUser(data.user)
+        setGameState('game')
+      } else {
+        const error = await response.json()
+        alert(error.error || 'Giriş başarısız')
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      alert('Giriş sırasında bir hata oluştu')
     }
   }
 
@@ -101,7 +125,7 @@ export default function Home() {
   const renderContent = () => {
     switch (gameState) {
       case 'registration':
-        return <RegistrationForm onSubmit={handleRegistration} onShowQRCode={handleShowQRCode} onShowAdmin={() => setGameState('admin')} />
+        return <RegistrationForm onSubmit={handleRegistration} onLogin={handleLogin} onShowQRCode={handleShowQRCode} onShowAdmin={() => setGameState('admin')} />
 
       case 'game':
         return currentUser ? (
