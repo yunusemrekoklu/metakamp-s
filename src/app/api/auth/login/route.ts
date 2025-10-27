@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import bcrypt from 'bcrypt'
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,9 +27,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Basit şifre kontrolü (gerçek uygulamada hash ile karşılaştırma yapılmalı)
-    // Not: Bu sadece demo amaçlıdır, production'da güvenli şifre hashleme kullanın
-    if (user.password !== password) {
+    // Güvenli şifre kontrolü - bcrypt ile hash karşılaştırma
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+
+    if (!isPasswordValid) {
       return NextResponse.json(
         { error: 'Şifre hatalı' },
         { status: 401 }

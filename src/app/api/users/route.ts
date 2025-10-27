@@ -1,6 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import bcrypt from 'bcrypt'
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,12 +64,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Şifreyi hash'le
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     // Yeni kullanıcı oluştur
     const user = await db.user.create({
       data: {
         email,
         username,
-        password, // Not: Gerçek uygulamada hash'lenmiş şifre saklanmalı
+        password: hashedPassword, // Güvenli hash'lenmiş şifre
         wantsNewsletter: wantsNewsletter || false
       }
     })

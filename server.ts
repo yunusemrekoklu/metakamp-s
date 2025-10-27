@@ -5,7 +5,7 @@ import { Server } from 'socket.io';
 import next from 'next';
 
 const dev = process.env.NODE_ENV !== 'production';
-const currentPort = dev ? 3001 : 3000; // Development'da 3001, Production'da 3000 portu
+const currentPort = process.env.PORT ? parseInt(process.env.PORT) : (dev ? 3001 : 3000); // Environment variable or default port
 const hostname = '0.0.0.0'; // Tüm ağ arayüzlerini dinle
 
 // Custom server with Socket.IO integration
